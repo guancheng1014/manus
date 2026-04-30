@@ -17,6 +17,7 @@ import SystemSettings from "./pages/SystemSettings";
 import PaymentPage from "./pages/PaymentPage";
 import OrderHistory from "./pages/OrderHistory";
 import CardKeyPurchase from "./pages/CardKeyPurchase";
+import PaymentManagement from "./pages/PaymentManagement";
 import AIOptimizationAdvisor from "./pages/AIOptimizationAdvisor";
 import DashboardLayout from "./components/DashboardLayout";
 
@@ -47,6 +48,7 @@ function DashboardRouter() {
         <Route path={"/dashboard/users"} component={UserManagement} />
         <Route path={"/dashboard/settings"} component={SystemSettings} />
         <Route path={"/dashboard/admin"} component={AdminDashboard} />
+        <Route path={"/dashboard/payment"} component={PaymentManagement} />
         <Route path={"/dashboard/ai-advisor"} component={AIOptimizationAdvisor} />
         <Route component={NotFound} />
       </Switch>
