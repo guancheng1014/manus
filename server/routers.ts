@@ -25,6 +25,7 @@ import { proxyRouter } from "./proxyRouters";
 import { ManusRegister } from "./registration";
 import { TRPCError } from "@trpc/server";
 import crypto from "crypto";
+import { advancedRouter } from "./advancedRouters";
 
 export const appRouter = router({
   system: systemRouter,
@@ -422,7 +423,9 @@ export const appRouter = router({
 
       return summary;
     }),
-  }),
-});
+   }),
 
+  // ========== 高级功能 ==========
+  advanced: advancedRouter,
+});
 export type AppRouter = typeof appRouter;
