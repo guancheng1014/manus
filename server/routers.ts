@@ -30,6 +30,7 @@ import { advancedRouter } from "./advancedRouters";
 import { aiRouter } from "./aiRouter";
 import { userRouter } from "./userRouter";
 import { announcementRouter } from './announcementRouter';
+import { paymentConfigRouter } from './paymentConfigRouter';
 
 export const appRouter = router({
   system: systemRouter,
@@ -440,5 +441,7 @@ export const appRouter = router({
   user: userRouter,
   // ========== 系统公告 ==========/
   announcements: announcementRouter,
+  // ========== u652fu4ed8u914du7f6e ==========/
+  paymentConfig: paymentConfigRouter,
 });
 export type AppRouter = typeof appRouter;

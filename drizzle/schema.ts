@@ -254,3 +254,26 @@ export const accountStats = mysqlTable("account_stats", {
 
 export type AccountStat = typeof accountStats.$inferSelect;
 export type InsertAccountStat = typeof accountStats.$inferInsert;
+
+
+// ========== 支付参数配置表 ==========
+export const paymentConfigs = mysqlTable("payment_configs", {
+  id: int("id").autoincrement().primaryKey(),
+  paymentMethod: mysqlEnum("paymentMethod", ["alipay", "wechat"]).notNull().unique(), // 支付方式
+  appId: varchar("appId", { length: 256 }).notNull(), // 应用ID
+  appSecret: varchar("appSecret", { length: 512 }).notNull(), // 应用密钥（加密存储）
+  merchantId: varchar("merchantId", { length: 256 }), // 商户ID
+  merchantKey: varchar("merchantKey", { length: 512 }), // 商户密钥（加密存储）
+  publicKey: text("publicKey"), // 公钥
+  privateKey: text("privateKey"), // 私钥（加密存储）
+  notifyUrl: varchar("notifyUrl", { length: 512 }), // 回调URL
+  returnUrl: varchar("returnUrl", { length: 512 }), // 返回URL
+  isEnabled: boolean("isEnabled").default(false).notNull(), // 是否启用
+  testMode: boolean("testMode").default(true).notNull(), // 是否测试模式
+  config: text("config"), // 其他配置参数（JSON格式）
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type PaymentConfig = typeof paymentConfigs.$inferSelect;
+export type InsertPaymentConfig = typeof paymentConfigs.$inferInsert;
