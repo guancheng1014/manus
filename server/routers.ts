@@ -28,6 +28,7 @@ import { TRPCError } from "@trpc/server";
 import crypto from "crypto";
 import { advancedRouter } from "./advancedRouters";
 import { aiRouter } from "./aiRouter";
+import { userRouter } from "./userRouter";
 
 export const appRouter = router({
   system: systemRouter,
@@ -433,5 +434,8 @@ export const appRouter = router({
 
   // ========== AI 助手 ==========
   ai: aiRouter,
+
+  // ========== 用户个人中心 ==========
+  user: userRouter,
 });
 export type AppRouter = typeof appRouter;

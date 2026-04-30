@@ -21,6 +21,7 @@ import PaymentManagement from "./pages/PaymentManagement";
 import AIOptimizationAdvisor from "./pages/AIOptimizationAdvisor";
 import DashboardLayout from "./components/DashboardLayout";
 import { AIAssistant } from "./components/AIAssistant";
+import UserProfile from "./pages/UserProfile";
 
 function Router() {
   return (
@@ -51,6 +52,7 @@ function DashboardRouter() {
         <Route path={"/dashboard/admin"} component={AdminDashboard} />
         <Route path={"/dashboard/payment"} component={PaymentManagement} />
         <Route path={"/dashboard/ai-advisor"} component={AIOptimizationAdvisor} />
+        <Route path={"/dashboard/profile"} component={UserProfile} />
         <Route component={NotFound} />
       </Switch>
     </DashboardLayout>

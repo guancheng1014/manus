@@ -138,7 +138,7 @@ export const registrationOrders = mysqlTable("registration_orders", {
   orderId: varchar("orderId", { length: 64 }).notNull().unique(), // 订单号
   userId: int("userId").notNull(),
   cardKeyId: int("cardKeyId").notNull(),
-  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(), // 金额
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull().default("0"), // 金额
   paymentMethod: mysqlEnum("paymentMethod", ["alipay", "wechat"]).notNull(),
   status: mysqlEnum("status", ["pending", "paid", "failed", "refunded"]).default("pending").notNull(),
   transactionId: varchar("transactionId", { length: 128 }), // 第三方交易号
@@ -153,3 +153,104 @@ export const registrationOrders = mysqlTable("registration_orders", {
 
 export type RegistrationOrder = typeof registrationOrders.$inferSelect;
 export type InsertRegistrationOrder = typeof registrationOrders.$inferInsert;
+
+// ========== API 密钥表 ==========
+export const apiKeys = mysqlTable("api_keys", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(), // 密钥名称
+  keyHash: varchar("keyHash", { length: 255 }).notNull(), // 密钥哈希值
+  keyPrefix: varchar("keyPrefix", { length: 20 }).notNull(), // 密钥前缀（用于显示）
+  status: mysqlEnum("status", ["active", "revoked"]).default("active").notNull(),
+  lastUsedAt: timestamp("lastUsedAt"),
+  expiresAt: timestamp("expiresAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type InsertApiKey = typeof apiKeys.$inferInsert;
+
+// ========== 用户通知设置表 ==========
+export const notificationSettings = mysqlTable("notification_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  emailTaskCompleted: boolean("emailTaskCompleted").notNull().default(true),
+  emailTaskFailed: boolean("emailTaskFailed").notNull().default(true),
+  emailCardKeyExpiring: boolean("emailCardKeyExpiring").notNull().default(true),
+  emailSystemAnnouncements: boolean("emailSystemAnnouncements").notNull().default(true),
+  emailWeeklyReport: boolean("emailWeeklyReport").notNull().default(false),
+  inAppTaskCompleted: boolean("inAppTaskCompleted").notNull().default(true),
+  inAppTaskFailed: boolean("inAppTaskFailed").notNull().default(true),
+  inAppCardKeyExpiring: boolean("inAppCardKeyExpiring").notNull().default(true),
+  inAppSystemAnnouncements: boolean("inAppSystemAnnouncements").notNull().default(true),
+  smsTaskFailed: boolean("smsTaskFailed").notNull().default(false),
+  smsCardKeyExpiring: boolean("smsCardKeyExpiring").notNull().default(false),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type NotificationSetting = typeof notificationSettings.$inferSelect;
+export type InsertNotificationSetting = typeof notificationSettings.$inferInsert;
+
+// ========== 用户安全设置表 ==========
+export const securitySettings = mysqlTable("security_settings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  twoFactorEnabled: boolean("twoFactorEnabled").notNull().default(false),
+  twoFactorSecret: varchar("twoFactorSecret", { length: 255 }), // TOTP 密钥
+  lastPasswordChangeAt: timestamp("lastPasswordChangeAt"),
+  passwordHash: varchar("passwordHash", { length: 255 }), // 密码哈希
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SecuritySetting = typeof securitySettings.$inferSelect;
+export type InsertSecuritySetting = typeof securitySettings.$inferInsert;
+
+// ========== 用户登录历史表 ==========
+export const loginHistory = mysqlTable("login_history", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  ipAddress: varchar("ipAddress", { length: 45 }).notNull(), // 支持 IPv4 和 IPv6
+  userAgent: text("userAgent"),
+  deviceName: varchar("deviceName", { length: 255 }),
+  location: varchar("location", { length: 255 }),
+  status: mysqlEnum("status", ["success", "failed"]).notNull(),
+  failureReason: text("failureReason"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type LoginHistory = typeof loginHistory.$inferSelect;
+export type InsertLoginHistory = typeof loginHistory.$inferInsert;
+
+// ========== 用户活动日志表 ==========
+export const activityLogs = mysqlTable("activity_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: varchar("action", { length: 64 }).notNull(), // 'login', 'profile_update', 'password_change', 'task_create', etc.
+  description: text("description"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  userAgent: text("userAgent"),
+  details: text("details"), // JSON 格式的详细信息
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ActivityLog = typeof activityLogs.$inferSelect;
+export type InsertActivityLog = typeof activityLogs.$inferInsert;
+
+// ========== 用户账户统计表 ==========
+export const accountStats = mysqlTable("account_stats", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  totalTasks: int("totalTasks").notNull().default(0),
+  successCount: int("successCount").notNull().default(0),
+  failCount: int("failCount").notNull().default(0),
+  totalAccounts: int("totalAccounts").notNull().default(0),
+  cardKeysUsed: int("cardKeysUsed").notNull().default(0),
+  creditsRemaining: decimal("creditsRemaining", { precision: 10, scale: 2 }).notNull().default("0"),
+  lastUpdatedAt: timestamp("lastUpdatedAt").defaultNow().onUpdateNow(),
+});
+
+export type AccountStat = typeof accountStats.$inferSelect;
+export type InsertAccountStat = typeof accountStats.$inferInsert;
