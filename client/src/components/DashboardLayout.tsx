@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Zap, Activity, Clock, Settings } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Zap, Activity, Clock, Settings, ShoppingCart } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -32,12 +32,14 @@ const menuItems = [
   { icon: Users, label: "批量注册", path: "/dashboard/batch" },
   { icon: Activity, label: "任务监控", path: "/dashboard/monitor" },
   { icon: Clock, label: "历史记录", path: "/dashboard/history" },
+  { icon: ShoppingCart, label: "订单历史", path: "/dashboard/orders" },
 ];
 
 const adminMenuItems = [
   { icon: Users, label: "用户管理", path: "/dashboard/users" },
   { icon: Settings, label: "系统设置", path: "/dashboard/settings" },
   { icon: LayoutDashboard, label: "管理后台", path: "/dashboard/admin" },
+  { icon: ShoppingCart, label: "支付管理", path: "/dashboard/payment" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

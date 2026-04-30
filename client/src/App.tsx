@@ -15,6 +15,7 @@ import ProxyConfiguration from "./pages/ProxyConfiguration";
 import UserManagement from "./pages/UserManagement";
 import SystemSettings from "./pages/SystemSettings";
 import PaymentPage from "./pages/PaymentPage";
+import OrderHistory from "./pages/OrderHistory";
 import DashboardLayout from "./components/DashboardLayout";
 
 function Router() {
@@ -38,6 +39,7 @@ function DashboardRouter() {
         <Route path={"/dashboard/batch"} component={BatchRegister} />
         <Route path={"/dashboard/monitor"} component={TaskMonitor} />
         <Route path={"/dashboard/history"} component={HistoryRecords} />
+        <Route path={"/dashboard/orders"} component={OrderHistory} />
         <Route path={"/dashboard/proxy"} component={ProxyConfiguration} />
         <Route path={"/dashboard/users"} component={UserManagement} />
         <Route path={"/dashboard/settings"} component={SystemSettings} />

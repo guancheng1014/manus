@@ -131,3 +131,25 @@ export const proxyConfigs = mysqlTable("proxy_configs", {
 
 export type ProxyConfig = typeof proxyConfigs.$inferSelect;
 export type InsertProxyConfig = typeof proxyConfigs.$inferInsert;
+
+// ========== 订单表 ==========
+export const registrationOrders = mysqlTable("registration_orders", {
+  id: int("id").autoincrement().primaryKey(),
+  orderId: varchar("orderId", { length: 64 }).notNull().unique(), // 订单号
+  userId: int("userId").notNull(),
+  cardKeyId: int("cardKeyId").notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(), // 金额
+  paymentMethod: mysqlEnum("paymentMethod", ["alipay", "wechat"]).notNull(),
+  status: mysqlEnum("status", ["pending", "paid", "failed", "refunded"]).default("pending").notNull(),
+  transactionId: varchar("transactionId", { length: 128 }), // 第三方交易号
+  quantity: int("quantity").notNull().default(1), // 购买数量
+  paidAt: timestamp("paidAt"), // 支付时间
+  refundedAt: timestamp("refundedAt"), // 退款时间
+  refundReason: text("refundReason"), // 退款原因
+  notes: text("notes"), // 备注
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type RegistrationOrder = typeof registrationOrders.$inferSelect;
+export type InsertRegistrationOrder = typeof registrationOrders.$inferInsert;
