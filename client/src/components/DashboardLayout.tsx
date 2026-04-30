@@ -22,7 +22,7 @@ import {
 import { getLoginUrl } from "@/const";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users, Zap, Activity, Clock, Settings, ShoppingCart, Brain } from "lucide-react";
+import { LayoutDashboard, LogOut, PanelLeft, Users, Zap, Activity, Clock, Settings, ShoppingCart, Brain, Mail, MessageSquare } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -34,6 +34,9 @@ const menuItems = [
   { icon: Activity, label: "任务监控", path: "/dashboard/monitor" },
   { icon: Clock, label: "历史记录", path: "/dashboard/history" },
   { icon: ShoppingCart, label: "订单历史", path: "/dashboard/orders" },
+  { icon: Mail, label: "Outlook 注册", path: "/dashboard/outlook-register" },
+  { icon: Mail, label: "邮箱验证", path: "/dashboard/email-verification" },
+  { icon: MessageSquare, label: "短信验证", path: "/dashboard/sms-verification" },
 ];
 
 const adminMenuItems = [

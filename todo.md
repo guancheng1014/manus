@@ -273,3 +273,49 @@
 - [x] 实现参数验证和测试功能 - 测试连接按钮
 - [x] 添加支付参数加密存储 - AES-256 加密敏感数据
 - [x] 编写支付参数配置的单元测试 - 所有 74 个测试通过
+
+
+## 邮箱和短信验证功能集成（新增 - 方案 A 完全免费）
+
+### 第一阶段：Outlook 自动创建
+- [ ] 集成 Skuxblan/Outlook-account-creator
+- [ ] 创建 Outlook 创建服务（outlookCreator.ts）
+- [ ] 实现批量创建 Outlook 账户
+- [ ] 添加代理和 CAPTCHA 支持
+- [ ] 创建 Outlook 创建路由（outlookRouter.ts）
+
+### 第二阶段：邮箱验证码接收
+- [ ] 集成 Temp-Mail API
+- [ ] 实现 Python IMAP 邮箱连接
+- [ ] 创建邮箱验证码提取服务
+- [ ] 创建邮箱验证码路由（emailVerificationRouter.ts）
+- [ ] 支持自动验证码识别
+
+### 第三阶段：短信验证码接收
+- [ ] 集成 TextBee 短信网关
+- [ ] 创建虚拟手机号服务
+- [ ] 实现短信验证码接收
+- [ ] 创建短信验证码路由（smsVerificationRouter.ts）
+
+### 第四阶段：前端界面
+- [ ] 创建邮箱管理页面
+- [ ] 创建短信验证码管理页面
+- [ ] 实现批量创建和验证流程
+- [ ] 添加验证码查看和复制功能
+
+### 第五阶段：测试和优化
+- [ ] 编写单元测试
+- [ ] 集成测试
+- [ ] 性能优化
+- [ ] 错误处理和重试机制
+
+
+### 第四阶段：前端验证界面（新增）
+- [ ] 创建 OutlookRegistration.tsx - Outlook 批量注册界面
+- [ ] 创建 EmailVerification.tsx - 邮箱验证码接收界面
+- [ ] 创建 SMSVerification.tsx - 短信验证码接收界面
+- [ ] 创建 VerificationDashboard.tsx - 统一验证管理面板
+- [ ] 添加验证结果导出功能（CSV/Excel）
+- [ ] 添加实时进度监控和日志显示
+- [ ] 在导航菜单中添加验证管理入口
+- [ ] 编写前端验证界面的单元测试

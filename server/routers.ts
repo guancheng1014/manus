@@ -1,3 +1,4 @@
+import { verificationRouter } from './verificationRouter';
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
@@ -443,5 +444,7 @@ export const appRouter = router({
   announcements: announcementRouter,
   // ========== u652fu4ed8u914du7f6e ==========/
   paymentConfig: paymentConfigRouter,
+  // ========== 邮箱和短信验证 ==========
+  verification: verificationRouter,
 });
 export type AppRouter = typeof appRouter;

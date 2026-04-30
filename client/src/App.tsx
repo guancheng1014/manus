@@ -22,6 +22,9 @@ import AIOptimizationAdvisor from "./pages/AIOptimizationAdvisor";
 import DashboardLayout from "./components/DashboardLayout";
 import { AIAssistant } from "./components/AIAssistant";
 import UserProfile from "./pages/UserProfile";
+import OutlookRegistration from "./pages/OutlookRegistration";
+import EmailVerification from "./pages/EmailVerification";
+import SMSVerification from "./pages/SMSVerification";
 
 function Router() {
   return (
@@ -53,6 +56,9 @@ function DashboardRouter() {
         <Route path={"/dashboard/payment"} component={PaymentManagement} />
         <Route path={"/dashboard/ai-advisor"} component={AIOptimizationAdvisor} />
         <Route path={"/dashboard/profile"} component={UserProfile} />
+        <Route path={"/dashboard/outlook-register"} component={OutlookRegistration} />
+        <Route path={"/dashboard/email-verification"} component={EmailVerification} />
+        <Route path={"/dashboard/sms-verification"} component={SMSVerification} />
         <Route component={NotFound} />
       </Switch>
     </DashboardLayout>
