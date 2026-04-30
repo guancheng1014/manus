@@ -237,3 +237,15 @@
 - [x] 集成公告到主路由
 - [x] 所有 74 个测试通过
 - [x] TypeScript 编译无错误
+
+
+## 深色模式切换功能（新增）
+
+- [x] 创建主题上下文和 hooks - ThemeContext.tsx
+- [x] 实现深色/浅色模式切换逻辑 - 支持 light/dark/system 三种模式
+- [x] 创建主题切换按钮组件 - ThemeSwitcher.tsx
+- [x] 集成主题切换到导航栏 - 添加到 DashboardLayout
+- [x] 添加主题持久化存储 - localStorage 支持
+- [x] 优化深色模式下的配色方案 - 在 index.css 中添加 .light 和 .dark 配色
+- [x] 测试深色模式在所有页面的显示效果 - 所有 74 个测试通过
+- [x] 支持浅色模式下的全面配色 - 白色背景、深色文字、浅色边框

@@ -79,6 +79,41 @@
   --sidebar-ring: oklch(0.7 0.21 262.5);
 }
 
+.light {
+  --primary: oklch(0.55 0.19 262.5); /* 浅色模式主色 */
+  --primary-foreground: oklch(0.98 0.01 285); /* 浅色模式前景 */
+  --sidebar-primary: oklch(0.55 0.19 262.5);
+  --sidebar-primary-foreground: oklch(0.98 0.01 285);
+  --background: oklch(0.98 0.01 285); /* 白色背景 */
+  --foreground: oklch(0.15 0.02 285); /* 深色文字 */
+  --card: oklch(0.95 0.01 285); /* 卡片背景 */
+  --card-foreground: oklch(0.15 0.02 285);
+  --popover: oklch(0.95 0.01 285);
+  --popover-foreground: oklch(0.15 0.02 285);
+  --secondary: oklch(0.55 0.18 142); /* 浅色模式绿色 */
+  --secondary-foreground: oklch(0.98 0.01 285);
+  --muted: oklch(0.75 0.05 285); /* 浅色模式灰色 */
+  --muted-foreground: oklch(0.5 0.08 285);
+  --accent: oklch(0.55 0.19 290); /* 浅色模式紫色 */
+  --accent-foreground: oklch(0.98 0.01 285);
+  --destructive: oklch(0.6 0.2 25); /* 红色 */
+  --destructive-foreground: oklch(0.98 0.01 285);
+  --border: oklch(0.85 0.02 285); /* 浅色边框 */
+  --input: oklch(0.95 0.01 285); /* 输入框背景 */
+  --ring: oklch(0.55 0.19 262.5);
+  --chart-1: oklch(0.55 0.19 262.5);
+  --chart-2: oklch(0.55 0.18 260);
+  --chart-3: oklch(0.55 0.17 258);
+  --chart-4: oklch(0.55 0.15 256);
+  --chart-5: oklch(0.55 0.13 254);
+  --sidebar: oklch(0.95 0.01 285);
+  --sidebar-foreground: oklch(0.15 0.02 285);
+  --sidebar-accent: oklch(0.55 0.19 262.5);
+  --sidebar-accent-foreground: oklch(0.98 0.01 285);
+  --sidebar-border: oklch(0.85 0.02 285);
+  --sidebar-ring: oklch(0.55 0.19 262.5);
+}
+
 .dark {
   --primary: oklch(0.7 0.21 262.5);
   --primary-foreground: oklch(0.08 0.01 285);
