@@ -91,7 +91,20 @@ export function PaymentConfigForm({ paymentMethod, onSuccess }: PaymentConfigFor
   };
 
   const handleToggle = async (isEnabled: boolean) => {
-    await toggleMutation.mutateAsync({ paymentMethod, isEnabled });
+    try {
+      await toggleMutation.mutateAsync({ paymentMethod, isEnabled });
+    } catch (err) {
+      if (!config) {
+        await upsertMutation.mutateAsync({
+          paymentMethod,
+          ...formData,
+          appSecret: formData.appSecret === '***' ? '' : formData.appSecret,
+          merchantKey: formData.merchantKey === '***' ? '' : formData.merchantKey,
+          privateKey: formData.privateKey === '***' ? '' : formData.privateKey,
+          isEnabled,
+        });
+      }
+    }
   };
 
   const paymentName = paymentMethod === 'alipay' ? '支付宝' : '微信支付';
