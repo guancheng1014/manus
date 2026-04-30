@@ -14,6 +14,7 @@ import HistoryRecords from "./pages/HistoryRecords";
 import ProxyConfiguration from "./pages/ProxyConfiguration";
 import UserManagement from "./pages/UserManagement";
 import SystemSettings from "./pages/SystemSettings";
+import PaymentPage from "./pages/PaymentPage";
 import DashboardLayout from "./components/DashboardLayout";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/activate"} component={CardKeyActivation} />
+      <Route path={"/payment"} component={PaymentPage} />
       <Route path={"/*"} component={DashboardRouter} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
