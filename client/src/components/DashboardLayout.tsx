@@ -32,11 +32,12 @@ const menuItems = [
   { icon: Users, label: "批量注册", path: "/dashboard/batch" },
   { icon: Activity, label: "任务监控", path: "/dashboard/monitor" },
   { icon: Clock, label: "历史记录", path: "/dashboard/history" },
-  { icon: Settings, label: "管理后台", path: "/dashboard/admin" },
 ];
 
 const adminMenuItems = [
-  { icon: Settings, label: "管理后台", path: "/dashboard/admin" },
+  { icon: Users, label: "用户管理", path: "/dashboard/users" },
+  { icon: Settings, label: "系统设置", path: "/dashboard/settings" },
+  { icon: LayoutDashboard, label: "管理后台", path: "/dashboard/admin" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -121,8 +122,8 @@ function DashboardLayoutContent({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   
-  const displayMenuItems = user?.role === "admin" ? menuItems : menuItems.filter(item => item.path !== "/dashboard/admin");
-  const activeMenuItem = displayMenuItems.find(item => item.path === location);
+  const allMenuItems = user?.role === "admin" ? [...menuItems, ...adminMenuItems] : menuItems;
+  const activeMenuItem = allMenuItems.find(item => item.path === location);
 
   useEffect(() => {
     if (isCollapsed) {
@@ -189,7 +190,7 @@ function DashboardLayoutContent({
 
           <SidebarContent className="gap-0">
             <SidebarMenu className="px-2 py-1">
-              {displayMenuItems.map(item => {
+              {allMenuItems.map(item => {
                 const isActive = location === item.path;
                 return (
                   <SidebarMenuItem key={item.path}>

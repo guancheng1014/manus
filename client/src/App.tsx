@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import HistoryRecords from "./pages/HistoryRecords";
 import ProxyConfiguration from "./pages/ProxyConfiguration";
 import UserManagement from "./pages/UserManagement";
+import SystemSettings from "./pages/SystemSettings";
 import DashboardLayout from "./components/DashboardLayout";
 
 function Router() {
@@ -37,6 +38,7 @@ function DashboardRouter() {
         <Route path={"/dashboard/history"} component={HistoryRecords} />
         <Route path={"/dashboard/proxy"} component={ProxyConfiguration} />
         <Route path={"/dashboard/users"} component={UserManagement} />
+        <Route path={"/dashboard/settings"} component={SystemSettings} />
         <Route path={"/dashboard/admin"} component={AdminDashboard} />
         <Route component={NotFound} />
       </Switch>
