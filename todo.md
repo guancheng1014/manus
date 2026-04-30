@@ -116,3 +116,13 @@
 - [x] 实现代理池管理接口
 - [x] 实现代理选择算法
 - [x] 添加代理轮换配置 UI
+
+## 代理集成功能（已完成）
+
+- [x] 实现第三方提供商 API 适配层 (proxyProviders.ts)
+- [x] 实现 Luminati API 集成
+- [x] 实现 Oxylabs API 集成
+- [x] 实现 SmartProxy API 集成
+- [x] 将代理轮换集成到注册流程 (registrationWithProxy.ts)
+- [x] 实现完整的注册流程（Turnstile → 邮箱 → 手机）
+- [x] 实现代理结果追踪和统计
