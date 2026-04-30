@@ -16,6 +16,8 @@ import UserManagement from "./pages/UserManagement";
 import SystemSettings from "./pages/SystemSettings";
 import PaymentPage from "./pages/PaymentPage";
 import OrderHistory from "./pages/OrderHistory";
+import CardKeyPurchase from "./pages/CardKeyPurchase";
+import AIOptimizationAdvisor from "./pages/AIOptimizationAdvisor";
 import DashboardLayout from "./components/DashboardLayout";
 
 function Router() {
@@ -24,6 +26,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/activate"} component={CardKeyActivation} />
       <Route path={"/payment"} component={PaymentPage} />
+      <Route path={"/purchase"} component={CardKeyPurchase} />
       <Route path={"/*"} component={DashboardRouter} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
@@ -44,6 +47,7 @@ function DashboardRouter() {
         <Route path={"/dashboard/users"} component={UserManagement} />
         <Route path={"/dashboard/settings"} component={SystemSettings} />
         <Route path={"/dashboard/admin"} component={AdminDashboard} />
+        <Route path={"/dashboard/ai-advisor"} component={AIOptimizationAdvisor} />
         <Route component={NotFound} />
       </Switch>
     </DashboardLayout>
