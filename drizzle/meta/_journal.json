@@ -15,6 +15,13 @@
       "when": 1777584170091,
       "tag": "0001_gorgeous_thaddeus_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1777585994151,
+      "tag": "0002_secret_marrow",
+      "breakpoints": true
     }
   ]
 }

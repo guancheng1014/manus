@@ -21,6 +21,7 @@ import {
   getSystemStats,
   getUserStats,
 } from "./db";
+import { proxyRouter } from "./proxyRouters";
 import { ManusRegister } from "./registration";
 import { TRPCError } from "@trpc/server";
 import crypto from "crypto";
@@ -361,24 +362,7 @@ export const appRouter = router({
   }),
 
   // ========== 代理配置 ==========
-  proxy: router({
-    getConfig: protectedProcedure.query(async ({ ctx }) => {
-      if (!ctx.user) {
-        throw new TRPCError({ code: "UNAUTHORIZED" });
-      }
-      return await getUserProxyConfig(ctx.user.id);
-    }),
-
-    setConfig: protectedProcedure
-      .input(z.object({ proxyApiUrl: z.string().url() }))
-      .mutation(async ({ input, ctx }) => {
-        if (!ctx.user) {
-          throw new TRPCError({ code: "UNAUTHORIZED" });
-        }
-        await createOrUpdateProxyConfig(ctx.user.id, input.proxyApiUrl);
-        return { success: true };
-      }),
-  }),
+  proxy: proxyRouter,
 
   // ========== 统计数据 ==========
   stats: router({

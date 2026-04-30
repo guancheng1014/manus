@@ -258,15 +258,20 @@ export async function getUserProxyConfig(userId: number) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-export async function createOrUpdateProxyConfig(userId: number, proxyApiUrl: string) {
+export async function createOrUpdateProxyConfig(userId: number, config: Partial<typeof proxyConfigs.$inferInsert>) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
-  const existing = await getUserProxyConfig(userId);
-  if (existing) {
-    await db.update(proxyConfigs).set({ proxyApiUrl }).where(eq(proxyConfigs.id, existing.id));
+  const existing = await db.select().from(proxyConfigs).where(eq(proxyConfigs.userId, userId)).limit(1);
+  
+  if (existing && existing.length > 0) {
+    await db.update(proxyConfigs).set(config).where(eq(proxyConfigs.userId, userId));
   } else {
-    await db.insert(proxyConfigs).values({ userId, proxyApiUrl });
+    await db.insert(proxyConfigs).values({
+      userId,
+      provider: "custom",
+      ...config,
+    });
   }
 }
 
