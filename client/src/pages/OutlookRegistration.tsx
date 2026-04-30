@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { trpc } from '@/lib/trpc';
 import { EmojiButton } from '@/components/EmojiButton';
+import { useLocation } from 'wouter';
 
 interface Account {
   email: string;
@@ -28,6 +29,7 @@ export default function OutlookRegistration() {
   const [progress, setProgress] = useState(0);
   const [proxyUrl, setProxyUrl] = useState('');
   const [captchaKey, setCaptchaKey] = useState('');
+  const [, setLocation] = useLocation();
 
   const createBatchMutation = trpc.verification.createOutlookAccountsBatch.useMutation();
 
@@ -56,6 +58,17 @@ export default function OutlookRegistration() {
 
       setAccounts(createdAccounts);
       setProgress(100);
+
+      // 自动导入到邮箱验证页面
+      const successAccounts = createdAccounts.filter(a => a.status === 'success');
+      if (successAccounts.length > 0) {
+        // 保存到 localStorage 以便在邮箱验证页面中使用
+        localStorage.setItem('importedOutlookAccounts', JSON.stringify(successAccounts));
+        // 延迟 2 秒后自动跳转到邮箱验证页面
+        setTimeout(() => {
+          setLocation('/dashboard/email-verification');
+        }, 2000);
+      }
     } catch (error) {
       console.error('创建失败:', error);
       alert('创建失败，请检查配置');

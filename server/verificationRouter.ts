@@ -4,15 +4,12 @@
  */
 
 import { z } from 'zod';
-import { publicProcedure } from './_core/trpc';
-import { initTRPC } from '@trpc/server';
+import { publicProcedure, router } from './_core/trpc';
 import * as outlookCreator from './services/outlookCreator';
 import * as emailVerification from './services/emailVerification';
 import * as smsVerification from './services/smsVerification';
 
-const t = initTRPC.create();
-
-export const verificationRouter = t.router({
+export const verificationRouter = router({
   // ========== Outlook 创建接口 ==========
   
   createOutlookAccount: publicProcedure

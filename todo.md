@@ -298,10 +298,11 @@
 - [ ] 创建短信验证码路由（smsVerificationRouter.ts）
 
 ### 第四阶段：前端界面
-- [ ] 创建邮箱管理页面
-- [ ] 创建短信验证码管理页面
-- [ ] 实现批量创建和验证流程
-- [ ] 添加验证码查看和复制功能
+- [x] 创建 OutlookRegistration.tsx - Outlook 批量注册界面
+- [x] 创建 EmailVerification.tsx - 邮箱验证码接收界面
+- [x] 创建 SMSVerification.tsx - 短信验证码接收界面
+- [x] 在 App.tsx 中添加验证管理页面路由
+- [x] 在 DashboardLayout 中添加验证管理菜单项
 
 ### 第五阶段：测试和优化
 - [ ] 编写单元测试
