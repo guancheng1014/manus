@@ -29,6 +29,7 @@ import crypto from "crypto";
 import { advancedRouter } from "./advancedRouters";
 import { aiRouter } from "./aiRouter";
 import { userRouter } from "./userRouter";
+import { announcementRouter } from './announcementRouter';
 
 export const appRouter = router({
   system: systemRouter,
@@ -437,5 +438,7 @@ export const appRouter = router({
 
   // ========== 用户个人中心 ==========
   user: userRouter,
+  // ========== 系统公告 ==========/
+  announcements: announcementRouter,
 });
 export type AppRouter = typeof appRouter;
