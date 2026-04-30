@@ -20,6 +20,7 @@ import CardKeyPurchase from "./pages/CardKeyPurchase";
 import PaymentManagement from "./pages/PaymentManagement";
 import AIOptimizationAdvisor from "./pages/AIOptimizationAdvisor";
 import DashboardLayout from "./components/DashboardLayout";
+import { AIAssistant } from "./components/AIAssistant";
 
 function Router() {
   return (
@@ -63,6 +64,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <AIAssistant />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

@@ -27,6 +27,7 @@ import { ManusRegister } from "./registration";
 import { TRPCError } from "@trpc/server";
 import crypto from "crypto";
 import { advancedRouter } from "./advancedRouters";
+import { aiRouter } from "./aiRouter";
 
 export const appRouter = router({
   system: systemRouter,
@@ -429,5 +430,8 @@ export const appRouter = router({
   // ========== 高级功能 ==========
   advanced: advancedRouter,
   orders: orderRouter,
+
+  // ========== AI 助手 ==========
+  ai: aiRouter,
 });
 export type AppRouter = typeof appRouter;
