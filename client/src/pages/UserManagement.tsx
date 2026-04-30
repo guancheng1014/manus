@@ -18,7 +18,7 @@ export default function UserManagement() {
 
   // 获取所有用户使用记录
   const usageRecordsQuery = trpc.history.getRecords.useQuery(
-    { limit: 1000, offset: 0 },
+    { limit: 100, offset: 0 },
     { enabled: user?.role === "admin" }
   );
 
