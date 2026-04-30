@@ -2,7 +2,7 @@ import { protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { getDb } from "./db";
 import { registrationOrders } from "../drizzle/schema";
-import { eq, and, like, desc, asc } from "drizzle-orm";
+import { eq, and, like, desc, asc, count } from "drizzle-orm";
 
 /**
  * 订单管理 tRPC 路由
@@ -55,11 +55,11 @@ export const orderRouter = router({
 
         // 查询总数
         const countResult = await db
-          .select({ count: registrationOrders.id })
+          .select({ count: count() })
           .from(registrationOrders)
           .where(and(...conditions));
 
-        const total = countResult[0]?.count || 0;
+        const total = Number(countResult[0]?.count) || 0;
 
         // 查询数据
         const orders = await db
