@@ -22,6 +22,7 @@ import {
   getUserStats,
 } from "./db";
 import { proxyRouter } from "./proxyRouters";
+import { orderRouter } from "./orderRouters";
 import { ManusRegister } from "./registration";
 import { TRPCError } from "@trpc/server";
 import crypto from "crypto";
@@ -427,5 +428,6 @@ export const appRouter = router({
 
   // ========== 高级功能 ==========
   advanced: advancedRouter,
+  orders: orderRouter,
 });
 export type AppRouter = typeof appRouter;
