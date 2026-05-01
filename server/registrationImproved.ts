@@ -8,7 +8,7 @@ import crypto from "crypto";
 
 type LogLevel = 'info' | 'warn' | 'error';
 
-export class ManusRegister {
+export class ManusRegisterImproved {
   private readonly API_BASE = "https://api.manus.im";
   private readonly AUTH_SERVICE = "user.v1.UserAuthPublicService";
   private readonly USER_SERVICE = "user.v1.UserService";
