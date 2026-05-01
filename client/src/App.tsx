@@ -25,6 +25,7 @@ import UserProfile from "./pages/UserProfile";
 import OutlookRegistration from "./pages/OutlookRegistration";
 import EmailVerification from "./pages/EmailVerification";
 import SMSVerification from "./pages/SMSVerification";
+import VerificationDashboard from "./pages/VerificationDashboard";
 
 function Router() {
   return (
@@ -59,6 +60,7 @@ function DashboardRouter() {
         <Route path={"/dashboard/outlook-register"} component={OutlookRegistration} />
         <Route path={"/dashboard/email-verification"} component={EmailVerification} />
         <Route path={"/dashboard/sms-verification"} component={SMSVerification} />
+        <Route path={"/dashboard/verification-dashboard"} component={VerificationDashboard} />
         <Route component={NotFound} />
       </Switch>
     </DashboardLayout>

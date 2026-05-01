@@ -37,6 +37,7 @@ const menuItems = [
   { icon: Mail, label: "Outlook 注册", path: "/dashboard/outlook-register" },
   { icon: Mail, label: "邮箱验证", path: "/dashboard/email-verification" },
   { icon: MessageSquare, label: "短信验证", path: "/dashboard/sms-verification" },
+  { icon: LayoutDashboard, label: "验证仪表板", path: "/dashboard/verification-dashboard" },
 ];
 
 const adminMenuItems = [
