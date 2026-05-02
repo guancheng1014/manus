@@ -43,6 +43,13 @@
       "when": 1777591597595,
       "tag": "0005_kind_expediter",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1777704018051,
+      "tag": "0006_thin_vision",
+      "breakpoints": true
     }
   ]
 }

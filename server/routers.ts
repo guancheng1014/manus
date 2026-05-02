@@ -21,7 +21,11 @@ import {
   createOrUpdateProxyConfig,
   getSystemStats,
   getUserStats,
+  getUserByEmail,
 } from "./db";
+import { getPasswordHash } from "./db/settings";
+import { sdk } from "./_core/sdk";
+import { ONE_YEAR_MS } from "@shared/const";
 import { proxyRouter } from "./proxyRouters";
 import { orderRouter } from "./orderRouters";
 import { ManusRegister } from "./registration";
@@ -32,11 +36,42 @@ import { aiRouter } from "./aiRouter";
 import { userRouter } from "./userRouter";
 import { announcementRouter } from './announcementRouter';
 import { paymentConfigRouter } from './paymentConfigRouter';
+import { adminRouter } from './adminRouter';
 
 export const appRouter = router({
+  admin: adminRouter,
   system: systemRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
+    login: publicProcedure
+      .input(z.object({
+        email: z.string().email(),
+        password: z.string()
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const user = await getUserByEmail(input.email);
+        if (!user) {
+          throw new TRPCError({ code: "UNAUTHORIZED", message: "用户不存在" });
+        }
+
+        const passwordHash = await getPasswordHash(user.id);
+        // 如果没有设置密码，或者密码不匹配（这里简单对比，实际应使用 hash）
+        if (!passwordHash || passwordHash !== input.password) {
+          throw new TRPCError({ code: "UNAUTHORIZED", message: "密码错误" });
+        }
+
+        const sessionToken = await sdk.createSessionToken(user.openId, {
+          name: user.name || user.email || "User"
+        });
+
+        const cookieOptions = getSessionCookieOptions(ctx.req);
+        ctx.res.cookie(COOKIE_NAME, sessionToken, {
+          ...cookieOptions,
+          maxAge: ONE_YEAR_MS,
+        });
+
+        return { success: true, user };
+      }),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });

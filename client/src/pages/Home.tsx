@@ -2,7 +2,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap, Users, BarChart3, Settings, LogOut } from "lucide-react";
-import { getLoginUrl } from "@/const";
+// import { getLoginUrl } from "@/const";
 import { useLocation } from "wouter";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
               <span className="text-white font-bold text-lg">Manus 注册工具</span>
             </div>
             <Button
-              onClick={() => (window.location.href = getLoginUrl())}
+              onClick={() => navigate("/login")}
               className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white"
             >
               登录
@@ -41,7 +41,7 @@ export default function Home() {
               支持卡密授权、实时监控、智能反检测的一站式解决方案。专为 Manus.im 设计。
             </p>
             <Button
-              onClick={() => (window.location.href = getLoginUrl())}
+              onClick={() => navigate("/login")}
               className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-8 py-3 text-lg rounded-lg"
             >
               立即开始

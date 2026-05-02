@@ -26,11 +26,14 @@ import OutlookRegistration from "./pages/OutlookRegistration";
 import EmailVerification from "./pages/EmailVerification";
 import SMSVerification from "./pages/SMSVerification";
 import VerificationDashboard from "./pages/VerificationDashboard";
+import Login from "./pages/Login";
+import AdminDashboardNew from "./pages/AdminDashboardNew";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/login"} component={Login} />
       <Route path={"/activate"} component={CardKeyActivation} />
       <Route path={"/payment"} component={PaymentPage} />
       <Route path={"/purchase"} component={CardKeyPurchase} />
@@ -53,7 +56,9 @@ function DashboardRouter() {
         <Route path={"/dashboard/proxy"} component={ProxyConfiguration} />
         <Route path={"/dashboard/users"} component={UserManagement} />
         <Route path={"/dashboard/settings"} component={SystemSettings} />
-        <Route path={"/dashboard/admin"} component={AdminDashboard} />
+        <Route path={"/dashboard/admin"} component={AdminDashboardNew} />
+        <Route path={"/dashboard/email-pool"} component={AdminDashboardNew} />
+        <Route path={"/dashboard/proxy-pool"} component={AdminDashboardNew} />
         <Route path={"/dashboard/payment"} component={PaymentManagement} />
         <Route path={"/dashboard/ai-advisor"} component={AIOptimizationAdvisor} />
         <Route path={"/dashboard/profile"} component={UserProfile} />

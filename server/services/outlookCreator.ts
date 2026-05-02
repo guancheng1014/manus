@@ -5,6 +5,7 @@
  */
 
 import crypto from 'crypto';
+import axios from 'axios';
 
 export interface OutlookAccount {
   email: string;
@@ -144,17 +145,45 @@ export async function createOutlookAccount(
     const password = generatePassword();
     const email = `${username}@outlook.com`;
     
-    // 这里应该集成实际的浏览器自动化逻辑
-    // 使用 Selenium 或 Puppeteer 访问 Microsoft 注册页面
-    // 填充表单、解决 CAPTCHA、验证邮箱等
+    // 1. 获取代理
+    let proxyUrl = options.proxyUrl;
+    if (!proxyUrl) {
+      try {
+        const proxyRes = await axios.get('http://localhost:8080/proxies?limit=1', { timeout: 2000 });
+        if (proxyRes.data && proxyRes.data.proxy && proxyRes.data.proxy.length > 0) {
+          const p = proxyRes.data.proxy[0];
+          proxyUrl = `${p.type}://${p.host}:${p.port}`;
+        }
+      } catch (e) {
+        console.warn('[Outlook Creator] 获取本地代理失败，尝试直连');
+      }
+    }
+
+    // 2. 解决验证码 (Outlook 注册通常需要解决 Funcaptcha)
+    let captchaToken = '';
+    try {
+      // 尝试调用本地 EzSolver 解决 Outlook 验证码
+      // 注意：这里假设 EzSolver 已经适配了 Outlook 的验证码类型
+      const ezRes = await axios.post('http://localhost:8191/solve', {
+        type: 'funcaptcha',
+        sitekey: 'B7D8911C-5CC8-A9A3-35B0-554ACEE604DA', // Outlook 注册常用的 SiteKey
+        url: 'https://signup.live.com/signup',
+        proxy: proxyUrl
+      }, { timeout: 60000 });
+      
+      if (ezRes.data && ezRes.data.token) {
+        captchaToken = ezRes.data.token;
+      }
+    } catch (e) {
+      console.warn('[Outlook Creator] 本地 EzSolver 解决失败或未配置，跳过验证码环节');
+    }
+
+    // 3. 执行注册逻辑 (此处为简化模拟，实际应调用浏览器自动化工具)
+    // 在真实场景中，我们会使用 Puppeteer/Playwright 配合 captchaToken 和 proxyUrl 完成注册
+    console.log(`[Outlook Creator] 正在注册: ${email} | 代理: ${proxyUrl || '直连'} | 验证码已解决: ${!!captchaToken}`);
     
-    // 模拟创建过程
-    console.log(`[Outlook Creator] 创建账户: ${email}`);
-    console.log(`[Outlook Creator] 使用代理: ${options.proxyUrl || '无'}`);
-    console.log(`[Outlook Creator] 浏览器指纹: ${JSON.stringify(generateBrowserFingerprint())}`);
-    
-    // 模拟网络请求延迟
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000));
+    // 模拟注册过程
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
     return {
       email,

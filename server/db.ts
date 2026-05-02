@@ -5,24 +5,33 @@ import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
-export async function getDb() {
+function initDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
       _db = drizzle(process.env.DATABASE_URL);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
-      _db = null;
     }
   }
   return _db;
 }
 
-export async function upsertUser(user: InsertUser): Promise<void> {
-  if (!user.openId) {
-    throw new Error("User openId is required for upsert");
+// 导出 Proxy 以支持延迟初始化
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(target, prop, receiver) {
+    const database = initDb();
+    if (!database) {
+      throw new Error("Database not initialized. Check DATABASE_URL.");
+    }
+    return Reflect.get(database, prop, receiver);
   }
+});
 
+export async function getDb() {
+  return initDb();
+}
+
+export async function upsertUser(user: InsertUser): Promise<void> {
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot upsert user: database not available");
@@ -31,46 +40,39 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 
   try {
     const values: InsertUser = {
-      openId: user.openId,
+      ...user
     };
-    const updateSet: Record<string, unknown> = {};
+    
+    // 如果没有 openId，我们假设使用 email 作为唯一标识
+    const uniqueCondition = user.openId 
+      ? eq(users.openId, user.openId) 
+      : (user.email ? eq(users.email, user.email) : null);
 
-    const textFields = ["name", "email", "loginMethod"] as const;
-    type TextField = (typeof textFields)[number];
-
-    const assignNullable = (field: TextField) => {
-      const value = user[field];
-      if (value === undefined) return;
-      const normalized = value ?? null;
-      values[field] = normalized;
-      updateSet[field] = normalized;
-    };
-
-    textFields.forEach(assignNullable);
-
-    if (user.lastSignedIn !== undefined) {
-      values.lastSignedIn = user.lastSignedIn;
-      updateSet.lastSignedIn = user.lastSignedIn;
-    }
-    if (user.role !== undefined) {
-      values.role = user.role;
-      updateSet.role = user.role;
-    } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
+    if (!uniqueCondition) {
+      throw new Error("Either openId or email is required for upsertUser");
     }
 
-    if (!values.lastSignedIn) {
-      values.lastSignedIn = new Date();
-    }
+    // 检查用户是否存在
+    const existing = await db.select().from(users).where(uniqueCondition).limit(1);
 
-    if (Object.keys(updateSet).length === 0) {
-      updateSet.lastSignedIn = new Date();
+    if (existing.length > 0) {
+      // 更新
+      const { id, ...updateData } = values;
+      await db.update(users).set({
+        ...updateData,
+        updatedAt: new Date()
+      }).where(uniqueCondition);
+    } else {
+      // 插入
+      if (!values.openId) {
+        // 为本地用户生成一个伪 openId
+        values.openId = `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      }
+      if (!values.lastSignedIn) {
+        values.lastSignedIn = new Date();
+      }
+      await db.insert(users).values(values as any);
     }
-
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
-      set: updateSet,
-    });
   } catch (error) {
     console.error("[Database] Failed to upsert user:", error);
     throw error;
@@ -86,6 +88,14 @@ export async function getUserByOpenId(openId: string) {
 
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
 
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getUserByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(users).where(eq(users.email, email)).limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
 

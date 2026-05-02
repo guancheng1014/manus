@@ -8,6 +8,8 @@ import { publicProcedure, router } from './_core/trpc';
 import * as outlookCreator from './services/outlookCreator';
 import * as emailVerification from './services/emailVerification';
 import * as smsVerification from './services/smsVerification';
+import { db } from './db';
+import { emailPool } from '../drizzle/schema';
 
 export const verificationRouter = router({
   // ========== Outlook 创建接口 ==========
@@ -23,6 +25,20 @@ export const verificationRouter = router({
         captchaKey: input.captchaKey,
       });
       
+      if (account.status === 'success' && account.email && account.password) {
+        // 自动保存到邮箱库
+        try {
+          await db.insert(emailPool).values({
+            email: account.email,
+            password: account.password,
+            source: 'outlook_creator',
+            status: 'available',
+          });
+        } catch (e) {
+          console.error('Failed to save outlook account to pool:', e);
+        }
+      }
+
       return {
         success: account.status === 'success',
         email: account.email,
@@ -47,9 +63,26 @@ export const verificationRouter = router({
         }
       );
       
+      // 自动保存成功的账号到邮箱库
+      const successfulAccounts = accounts.filter(a => a.status === 'success' && a.email && a.password);
+      if (successfulAccounts.length > 0) {
+        try {
+          for (const acc of successfulAccounts) {
+            await db.insert(emailPool).values({
+              email: acc.email!,
+              password: acc.password!,
+              source: 'outlook_creator_batch',
+              status: 'available',
+            });
+          }
+        } catch (e) {
+          console.error('Failed to save batch outlook accounts to pool:', e);
+        }
+      }
+
       return {
         total: accounts.length,
-        success: accounts.filter(a => a.status === 'success').length,
+        success: successfulAccounts.length,
         failed: accounts.filter(a => a.status === 'failed').length,
         accounts: accounts.map(a => ({
           email: a.email,

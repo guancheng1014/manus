@@ -15,6 +15,8 @@ export class ManusRegister {
   private readonly TEAM_SERVICE = "team.v1.TeamService";
   private readonly PUBLIC_SERVICE = "user.v1.UserPublicService";
   private readonly YESCAPTCHA_URL = "https://api.yescaptcha.com";
+  private readonly EZSOLVER_URL = process.env.EZSOLVER_URL || "http://localhost:8191";
+  private readonly WORLDPOOL_URL = "http://localhost:8080";
   private readonly TURNSTILE_SITEKEY = "0x4AAAAAAA_sd0eRNCinWBgU";
   private readonly TURNSTILE_PAGE = "https://manus.im/login";
 
@@ -86,9 +88,10 @@ export class ManusRegister {
       throw new Error("Invalid email API URL");
     }
 
-    if (!this.yesCaptchaKey) {
-      throw new Error("YesCaptcha key is required");
-    }
+    // 移除强制要求，因为我们现在有本地 EzSolver 替代方案
+    // if (!this.yesCaptchaKey) {
+    //   throw new Error("YesCaptcha key is required");
+    // }
 
     if (this.phone && !/^\d+$/.test(this.phone)) {
       throw new Error("Invalid phone number format");
@@ -220,7 +223,21 @@ export class ManusRegister {
   /**
    * 改进的代理获取方法 - 现在是异步的
    */
-  private async fetchProxy(): Promise<void> {
+  public async fetchProxy(): Promise<void> {
+    // 优先尝试本地 Worldpool
+    try {
+      this.log("[Proxy] 尝试从本地 Worldpool 获取代理...", 'info');
+      const wpResponse = await axios.get(`${this.WORLDPOOL_URL}/proxies/random?protocol=http&google_pass=true`, { timeout: 5000 });
+      if (wpResponse.data && wpResponse.data.host) {
+        const p = wpResponse.data;
+        this.proxyUrl = `http://${p.host}:${p.port}`;
+        this.log(`[Proxy] 从 Worldpool 获取到代理: ${p.host}:${p.port} (${p.country_code || 'unknown'})`, 'info');
+        return;
+      }
+    } catch (e: any) {
+      this.log(`[Proxy] 本地 Worldpool 获取失败: ${e.message}`, 'warn');
+    }
+
     if (!this.proxyApiUrl) return;
 
     try {
@@ -344,6 +361,31 @@ export class ManusRegister {
 
   async solveTurnstile(): Promise<string> {
     return this.retryWithExponentialBackoff(async () => {
+      // 优先尝试本地 EzSolver
+      try {
+        this.log("[Turnstile] 尝试使用本地 EzSolver 解决验证码...", 'info');
+        const ezResponse = await axios.post(
+          `${this.EZSOLVER_URL}/solve`,
+          {
+            sitekey: this.TURNSTILE_SITEKEY,
+            siteurl: this.TURNSTILE_PAGE,
+            timeout: 60
+          },
+          { timeout: 70000 }
+        );
+        if (ezResponse.data.token) {
+          this.log("[Turnstile] 本地 EzSolver 解决成功", 'info');
+          return ezResponse.data.token;
+        }
+      } catch (e: any) {
+        this.log(`[Turnstile] 本地 EzSolver 失败: ${e.message}, 切换至 YesCaptcha`, 'warn');
+      }
+
+      // 备选方案: YesCaptcha
+      if (!this.yesCaptchaKey) {
+        throw new Error("Local EzSolver failed and no YesCaptcha key provided");
+      }
+
       const response = await axios.post(
         `${this.YESCAPTCHA_URL}/api/createTask`,
         {

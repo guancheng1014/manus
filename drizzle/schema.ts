@@ -277,3 +277,19 @@ export const paymentConfigs = mysqlTable("payment_configs", {
 
 export type PaymentConfig = typeof paymentConfigs.$inferSelect;
 export type InsertPaymentConfig = typeof paymentConfigs.$inferInsert;
+
+// ========== 邮箱库表 (Outlook 注册成果) ==========
+export const emailPool = mysqlTable("email_pool", {
+  id: int("id").autoincrement().primaryKey(),
+  email: varchar("email", { length: 320 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
+  status: mysqlEnum("status", ["available", "assigned", "invalid", "registered"]).default("available").notNull(),
+  assignedTo: int("assignedTo"), // 分配给哪个用户 ID
+  registeredAt: timestamp("registeredAt"), // Manus 注册成功时间
+  source: varchar("source", { length: 64 }).default("outlook_creator"), // 来源
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type EmailPool = typeof emailPool.$inferSelect;
+export type InsertEmailPool = typeof emailPool.$inferInsert;

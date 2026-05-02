@@ -19,7 +19,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getLoginUrl } from "@/const";
+// import { getLoginUrl } from "@/const";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useIsMobile } from "@/hooks/useMobile";
 import { LayoutDashboard, LogOut, PanelLeft, Users, Zap, Activity, Clock, Settings, ShoppingCart, Brain, Mail, MessageSquare } from "lucide-react";
@@ -31,19 +31,20 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: Zap, label: "单账号注册", path: "/dashboard/single" },
   { icon: Users, label: "批量注册", path: "/dashboard/batch" },
-  { icon: Activity, label: "任务监控", path: "/dashboard/monitor" },
   { icon: Clock, label: "历史记录", path: "/dashboard/history" },
   { icon: ShoppingCart, label: "订单历史", path: "/dashboard/orders" },
   { icon: Mail, label: "Outlook 注册", path: "/dashboard/outlook-register" },
   { icon: Mail, label: "邮箱验证", path: "/dashboard/email-verification" },
   { icon: MessageSquare, label: "短信验证", path: "/dashboard/sms-verification" },
-  { icon: LayoutDashboard, label: "验证仪表板", path: "/dashboard/verification-dashboard" },
 ];
 
 const adminMenuItems = [
+  { icon: LayoutDashboard, label: "管理仪表板", path: "/dashboard/admin" },
+  { icon: Activity, label: "全局任务监控", path: "/dashboard/monitor" },
   { icon: Users, label: "用户管理", path: "/dashboard/users" },
+  { icon: Mail, label: "邮箱库管理", path: "/dashboard/email-pool" },
+  { icon: Zap, label: "代理 IP 管理", path: "/dashboard/proxy-pool" },
   { icon: Settings, label: "系统设置", path: "/dashboard/settings" },
-  { icon: LayoutDashboard, label: "管理后台", path: "/dashboard/admin" },
   { icon: ShoppingCart, label: "支付管理", path: "/dashboard/payment" },
   { icon: Brain, label: "AI 优化建议", path: "/dashboard/ai-advisor" },
 ];
@@ -86,7 +87,7 @@ export default function DashboardLayout({
           </div>
           <Button
             onClick={() => {
-              window.location.href = getLoginUrl();
+              window.location.href = "/login";
             }}
             size="lg"
             className="w-full shadow-lg hover:shadow-xl transition-all"
